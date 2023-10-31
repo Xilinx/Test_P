@@ -1,9 +1,8 @@
 ARG centosversion
-FROM registry.amd.com/quay.io/centos/centos:centos${centosversion} AS builder
+FROM quay.io/centos/centos:centos${centosversion} AS builder
 
-LABEL org.opencontainers.image.authors="matt.snow@amd.com"
+LABEL org.opencontainers.image.authors="wons.ttam@amd.com"
 LABEL org.opencontainers.image.description="A containerized build of the latest versions of Python and OpenSSL."
-LABEL org.opencontainers.image.url="https://gitenterprise.xilinx.com/msnow/python_engkit_builds"
 
 ARG pythonversion
 ARG opensslversion
@@ -48,5 +47,5 @@ WORKDIR ${PYTHONDIR}/bin
 
 RUN sed -i -e "s,${PYTHONDIR}/bin/python3*,/bin/env python3,g" 2to3* idle3* pip3* pydoc3*
 
-FROM registry.amd.com/quay.io/centos/centos:centos${centosversion}
+FROM quay.io/centos/centos:centos${centosversion}
 COPY --from=builder /build/target/ /package/
