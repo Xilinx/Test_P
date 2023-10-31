@@ -1,0 +1,52 @@
+ARG centosversion
+FROM registry.amd.com/quay.io/centos/centos:centos${centosversion} AS builder
+
+LABEL org.opencontainers.image.authors="matt.snow@amd.com"
+LABEL org.opencontainers.image.description="A containerized build of the latest versions of Python and OpenSSL."
+LABEL org.opencontainers.image.url="https://gitenterprise.xilinx.com/msnow/python_engkit_builds"
+
+ARG pythonversion
+ARG opensslversion
+
+RUN yum update -y \
+    && yum install -y gcc gcc-c++ make \
+        bzip2-devel ncurses-devel gdbm-devel xz-devel redhat-lsb-core \
+        sqlite-devel libuuid-devel uuid-devel wget libcurl-devel \
+        perl zlib-devel libffi-devel readline-devel tcl-devel tk-devel \
+    && yum clean all
+
+ENV SSLDIR=/build/target/openssl-${opensslversion}
+ENV PYTHONDIR=/build/target/python-${pythonversion}
+ENV SSLDIR=/build/target/openssl-${opensslversion}
+ENV LDFLAGS="-L${SSLDIR}/include -L/usr/include"
+ENV CPPFLAGS="-I${SSLDIR}/include -I/usr/include -I/usr/lib/include"
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV DISTRO="$(/usr/bin/lsb_release -i | cut -d: -f2 | tr '[:upper:]' '[:lower:]')"
+
+RUN mkdir /build
+WORKDIR /build
+
+RUN wget --progress=dot:giga https://www.openssl.org/source/openssl-${opensslversion}.tar.gz && tar -zxf openssl-${opensslversion}.tar.gz
+RUN wget --progress=dot:giga https://www.python.org/ftp/python/${pythonversion}/Python-${pythonversion}.tgz && tar -zxf Python-${pythonversion}.tgz
+
+
+WORKDIR /build/openssl-${opensslversion}
+
+RUN ./Configure shared --prefix=${SSLDIR} --openssldir=${SSLDIR} linux-x86_64 && make -j8 && make install
+
+WORKDIR /build/Python-${pythonversion}
+
+RUN LDFLAGS="-L${SSLDIR}/include -L/usr/include" \
+    LD_LIBRARY_PATH="${SSLDIR}/lib:${SSLDIR}/lib64:/usr/lib64:/lib64" \
+    CPPFLAGS="-I${SSLDIR}/include -I${SSLDIR}/include/openssl -I/usr/include -I/usr/lib/include" \
+    ./configure --prefix=${PYTHONDIR} --with-openssl=${SSLDIR} \
+    --with-openssl-rpath=auto \
+    --with-ensurepip=upgrade && make -j8 && make install
+
+WORKDIR ${PYTHONDIR}/bin
+
+RUN sed -i -e "s,${PYTHONDIR}/bin/python3*,/bin/env python3,g" 2to3* idle3* pip3* pydoc3*
+
+FROM registry.amd.com/quay.io/centos/centos:centos${centosversion}
+COPY --from=builder /build/target/ /package/
