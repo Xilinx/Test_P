@@ -1,5 +1,5 @@
 ARG ubuntuversion
-FROM registry.amd.com/dockerhub/ubuntu:${ubuntuversion} AS builder
+FROM ubuntu:${ubuntuversion} AS builder
 
 LABEL org.opencontainers.image.authors="wons.ttam@amd.com"
 LABEL org.opencontainers.image.description="A containerized build of the latest versions of Python and OpenSSL."
@@ -60,6 +60,6 @@ WORKDIR ${PYTHONDIR}/bin
 
 RUN sed -i -e "s,${PYTHONDIR}/bin/python3*,/bin/env python3,g" 2to3* idle3* pip3* pydoc3*
 
-FROM registry.amd.com/dockerhub/ubuntu:${ubuntuversion}
+FROM ubuntu:${ubuntuversion}
 
 COPY --from=builder /build/target/ /package/
