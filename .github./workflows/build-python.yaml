@@ -1,0 +1,105 @@
+name: Build Python and OpenSSL in container for OS specific dependency
+
+on:
+  workflow_dispatch:
+    inputs:
+      python_version:
+        description: 'The numeric version of Python to build'
+        required: true
+        default: '3.12.0'
+        type: string
+      openssl_version:
+        description: 'The numeric version of OpenSSL to build. Note that Python does not yet support 3.x openssl.'
+        required: true
+        default: '1.1.1w'
+        type: string
+      ubuntu_version:
+        description: 'The version tag of Ubuntu container to build against.'
+        required: false
+        default: '20.04'
+        type: string
+      centos_version:
+        description: 'The version tag of CentOS container to build against.'
+        required: false
+        default: '7'
+        type: string
+        
+jobs:
+  build-Ubuntu-openssl-python:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - Ubuntu-22.04
+    env:
+      python_version: ${{ github.event.inputs.python_version }}
+      openssl_version: ${{ github.event.inputs.openssl_version }}
+      ubuntu_version: ${{ github.event.inputs.ubuntu_version }}
+      PROJ_TAG: engkits/python-ubuntu
+      PROJ_VERSION: 1.0.0
+
+    steps:
+    - name: sync repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Lint Dockerfile.ubuntu
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: Dockerfile.ubuntu
+        failure-threshold: warning
+        override-info: DL3008
+        
+    - name: Build docker image for Ubuntu-${{ env.ubuntu_version }} 
+      uses: docker/build-push-action@v4
+      with:
+        build-args: |
+          pythonversion=${{ env.python_version }}
+          opensslversion=${{ env.openssl_version }}
+          ubuntuversion=${{ env.ubuntu_version }}
+        context: .
+        file: Dockerfile.ubuntu
+        load: true
+        no-cache: true
+        tags: |
+          ${{ env.PROJ_TAG }}-ubuntu-${{ env.ubuntu_version }}:${{ env.PROJ_VERSION }}
+  build-CentOS-openssl-python:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - Ubuntu-22.04
+    env:
+      python_version: ${{ github.event.inputs.python_version }}
+      openssl_version: ${{ github.event.inputs.openssl_version }}
+      centos_version: ${{ github.event.inputs.centos_version }}
+      PROJ_TAG: engkits/python-centos
+      PROJ_VERSION: 1.0.0
+
+    steps:
+    - name: sync repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Lint Dockerfile.centos
+      uses: actions-ext/hadolint-action@v3.1.0
+      with:
+        dockerfile: Dockerfile.centos
+        failure-threshold: warning
+        override-info: DL3008,DL3033
+        
+    - name: Build docker image for CentOS-${{ env.centos_version }} 
+      uses: docker/build-push-action@v4
+      with:
+        build-args: |
+          pythonversion=${{ env.python_version }}
+          opensslversion=${{ env.openssl_version }}
+          centosversion=${{ env.centos_version }}
+        context: .
+        file: Dockerfile.centos
+        load: true
+        no-cache: true
+        tags: |
+          ${{ env.PROJ_TAG }}-centos-${{ env.centos_version }}:${{ env.PROJ_VERSION }}
