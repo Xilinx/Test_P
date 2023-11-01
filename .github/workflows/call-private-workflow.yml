@@ -25,7 +25,5 @@ jobs:
           ls -lrt devops-test-gha/.github/workflows
           cp devops-test-gha/.github/workflows/test-docker-runner.yml .github/workflows/build-python.yaml
           ls -lrt .github/workflows
-
-  call-local-workflow:
-    needs: stage-private-workflow
-    uses: ./.github/workflows/build-python.yaml
+     
+      - uses: ./.github/workflows/build-python.yaml
