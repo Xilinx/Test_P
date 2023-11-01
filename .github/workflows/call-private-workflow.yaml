@@ -28,4 +28,4 @@ jobs:
           cp devops-test-gha/.github/workflows/test-docker-runner.yaml .github/workflows
           ls -lrt .github/workflows
 
-      - uses: ./.github/workflows/ build-python.yaml
+      - uses: ./.github/workflows/build-python.yaml
