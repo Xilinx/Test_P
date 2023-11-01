@@ -17,15 +17,9 @@ jobs:
           repository: "devops/test-gha"
           ref: 'main'
           token: ${{ secrets.CI_DOMAIN_TOKEN }}
-          path: 'devops-test-gha'
+          path: 'devops/test-gha'
           github-server-url: ${{ env.GITHUB_SERVER_URL }}
-
-      - name: stage-workflows
-        run: |
-          ls -lrt devops-test-gha/.github/workflows
-          cp devops-test-gha/.github/workflows/test-docker-runner.yml .github/workflows/build-python.yaml
-          ls -lrt .github/workflows
 
   call-private-workflow:
     needs: stage-private-workflow
-    uses: devops/test-gha/.github/workflows/test-docker-runner.yml@main
+    uses: ./devops/test-gha/.github/workflows/test-docker-runner.yml
