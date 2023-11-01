@@ -21,5 +21,9 @@ jobs:
           path: 'devops-test-gha'
           github-server-url: ${{ env.GITHUB_SERVER_URL }}
 
+      - name: get-workspace-details
+        run: |
+          ls -lrt
+
       - name: run-test-action
-        uses: devops-test-gha/.github/workflows/test-docker-runner.yaml@main
+        uses: ./.github/workflows/test-docker-runner.yaml@main
