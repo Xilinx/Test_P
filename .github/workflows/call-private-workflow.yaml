@@ -26,6 +26,6 @@ jobs:
           pwd
           ls -lrt devops-test-gha
           ls -lrt devops-test-gha/.github/workflows
-
-      - name: run-test-action
-        uses: "devops-test-gha/.github/workflows/test-docker-runner.yaml@main"
+          
+  calling-workflow:
+    uses: devops-test-gha/.github/workflows/test-docker-runner.yaml@main
