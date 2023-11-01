@@ -20,4 +20,4 @@ jobs:
           token: ${{ secrets.CI_DOMAIN_TOKEN }}
           path: 'devops-test-gha'
         env:
-          GITHUB_SERVER_URL: ${{ secrets.CI_DOMAIN_HTTPS_URL }}
+          GITHUB_SERVER_URL: ${{ env.GITHUB_SERVER_URL }}
