@@ -14,6 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: "devops/test-gha"
           ref: 'main'
@@ -21,10 +22,9 @@ jobs:
           path: 'devops-test-gha'
           github-server-url: ${{ env.GITHUB_SERVER_URL }}
 
-      - name: get-workspace-details
+      - name: stage-workflows
         run: |
-          pwd
-          ls -lrt devops-test-gha
-          ls -lrt devops-test-gha/.github/workflows
+          cp devops-test-gha/.github/workflows/test-docker-runner.yaml .github/workflows
+          ls -lrt .github/workflows
 
       - uses: ./devops-test-gha/.github/workflows/test-docker-runner.yaml
