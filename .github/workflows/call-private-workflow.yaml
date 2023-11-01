@@ -12,10 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: devops/test-gha
-          token: ${{ secrets.CI_DOMAIN_TOKEN }} # `GH_PAT` is a secret that contains your PAT
-          path: devops-test-gha
+          repository: "devops/test-gha"
+          ref: 'main'
+          token: ${{ secrets.CI_DOMAIN_TOKEN }}
+          path: 'devops-test-gha'
         env:
           GITHUB_SERVER_URL: ${{ secrets.CI_DOMAIN_HTTPS_URL }}
-
-    
