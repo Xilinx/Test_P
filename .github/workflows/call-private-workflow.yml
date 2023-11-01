@@ -28,4 +28,4 @@ jobs:
 
   call-private-workflow:
     needs: stage-private-workflow
-    uses: ./.github/workflows/test-docker-runner.yml
+    uses: devops/test-gha/.github/workflows/test-docker-runner.yml@main
