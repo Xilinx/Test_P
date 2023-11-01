@@ -28,4 +28,5 @@ jobs:
           cp devops-test-gha/.github/workflows/test-docker-runner.yml .github/workflows
           ls -lrt .github/workflows
 
-      - uses: ./.github/workflows/test-docker-runner.yml
+  call-local-workflow:
+    uses: ./.github/workflows/test-docker-runner.yml
