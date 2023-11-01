@@ -7,7 +7,6 @@ env:
    GITHUB_SERVER_URL: ${{ secrets.CI_DOMAIN_HTTPS_URL }}
 
 jobs:
-
   stage-private-workflow:
     name: call-private-workflow
     runs-on: self-hosted
