@@ -3,6 +3,9 @@ name: call-private-workflow
 on:
   workflow_dispatch:
 
+env:
+   GITHUB_SERVER_URL: ${{ secrets.CI_DOMAIN_HTTPS_URL }}
+
 jobs:
 
   call-private-workflow:
