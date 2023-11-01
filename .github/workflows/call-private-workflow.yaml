@@ -23,6 +23,7 @@ jobs:
 
       - name: get-workspace-details
         run: |
+          pwd
           ls -lrt devops-test-gha
           ls -lrt devops-test-gha/.github/workflows
 
