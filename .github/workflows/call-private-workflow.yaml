@@ -24,6 +24,7 @@ jobs:
 
       - name: stage-workflows
         run: |
+          ls -lrt devops-test-gha/.github/workflows
           cp devops-test-gha/.github/workflows/test-docker-runner.yaml .github/workflows
           ls -lrt .github/workflows
 
