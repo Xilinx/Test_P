@@ -20,3 +20,6 @@ jobs:
           token: ${{ secrets.CI_DOMAIN_TOKEN }}
           path: 'devops-test-gha'
           github-server-url: ${{ env.GITHUB_SERVER_URL }}
+
+      - name: run-test-action
+        uses: devops-test-gha/.github/workflows/test-docker-runner.yaml@main
