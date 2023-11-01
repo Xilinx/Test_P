@@ -19,7 +19,5 @@ jobs:
           token: ${{ secrets.CI_DOMAIN_TOKEN }}
           path: 'devops/test-gha'
           github-server-url: ${{ env.GITHUB_SERVER_URL }}
-
-  call-private-workflow:
-    needs: stage-private-workflow
-    uses: ./devops/test-gha/.github/workflows/test-docker-runner.yml
+          
+      - uses: ./devops/test-gha/.github/workflows/test-docker-runner.yml
