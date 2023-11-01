@@ -30,4 +30,4 @@ jobs:
 
   call-local-workflow:
     needs: stage-private-workflow
-    uses: devops-test-gha/.github/workflows/test-docker-runner.yml@main
+    uses: ./devops-test-gha/.github/workflows/test-docker-runner.yml
