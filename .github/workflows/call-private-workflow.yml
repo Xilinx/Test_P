@@ -8,7 +8,7 @@ env:
 
 jobs:
 
-  call-private-workflow:
+  stage-private-workflow:
     name: call-private-workflow
     runs-on: self-hosted
 
@@ -29,4 +29,5 @@ jobs:
           ls -lrt .github/workflows
 
   call-local-workflow:
-    uses: ./.github/workflows/build-python.yaml
+    needs: stage-private-workflow
+    uses: ./.github/workflows/test-docker-runner.yml
