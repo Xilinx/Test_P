@@ -1,6 +1,7 @@
 name: Build Python and OpenSSL in container for OS specific dependency
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       python_version:
