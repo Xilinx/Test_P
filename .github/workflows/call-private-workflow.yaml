@@ -26,4 +26,4 @@ jobs:
           ls -lrt
 
       - name: run-test-action
-        uses: ./.github/workflows/test-docker-runner.yaml@main
+        uses: ./devops-test-gha/.github/workflows/test-docker-runner.yaml@main
