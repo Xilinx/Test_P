@@ -15,9 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: "${{ env.GITHUB_SERVER_URL }}/devops/test-gha"
+          repository: "devops/test-gha"
           ref: 'main'
           token: ${{ secrets.CI_DOMAIN_TOKEN }}
           path: 'devops-test-gha'
-        env:
-          GITHUB_SERVER_URL: ${{ env.GITHUB_SERVER_URL }}
+          github-server-url: ${{ env.GITHUB_SERVER_URL }}
