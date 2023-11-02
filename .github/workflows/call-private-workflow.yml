@@ -12,6 +12,7 @@ jobs:
         with:
           repository: actions-int/hello-world-action
           token: ${{ secrets.CI_DOMAIN_TOKEN}}
+          ref: 'main'
           path: hello-world-action
           github-server-url: ${{ secrets.GITHUB_SERVER_URL }}
       - name: Run reusable workflow
