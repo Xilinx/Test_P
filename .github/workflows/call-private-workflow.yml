@@ -3,21 +3,22 @@ name: call-private-workflow
 on:
   workflow_dispatch:
 
-env:
-   GITHUB_SERVER_URL: ${{ secrets.CI_DOMAIN_HTTPS_URL }}
-
 jobs:
   stage-private-workflow:
-    name: stage-private-workflow
     runs-on: self-hosted
-
+    name: A job to say hello
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: "devops/test-gha"
+          repository: actions-int/hello-world-action
+          token: ${{ secrets.CI_DOMAIN_TOKEN}}
           ref: 'main'
-          token: ${{ secrets.CI_DOMAIN_TOKEN }}
-          path: 'devops/test-gha'
-          github-server-url: ${{ env.GITHUB_SERVER_URL }}
-          
-      - uses: ./devops/test-gha/.github/workflows/test-docker-runner.yml
+          path: hello-world-action
+          github-server-url: ${{ secrets.CI_DOMAIN_HTTPS_URL }}
+      - name: Run reusable workflow
+        uses: ./hello-world-action/hello-world
+        with:
+          who-to-greet: 'Lets get some testing action going...'
+      - run: echo random-number ${{ steps.foo.outputs.random-number }}
+        shell: bash
+
