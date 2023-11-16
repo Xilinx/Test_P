@@ -8,4 +8,3 @@ Testing the pull_request_target_fork
 
 Testing the pull_request_target_fork
 
-Testing the pull_request_target_fork
